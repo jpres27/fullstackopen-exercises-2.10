@@ -1,29 +1,37 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+import axios from 'axios'
+import heroesService from './services/heroes'
 
 const App = () => {
-  const [persons, setPersons] = useState([
-    {
-    name: 'Ragnar',
-    sword: 'Tyrfing',
-    id: 1,   
-    }
-  ]) 
+  const [persons, setPersons] = useState([]) 
   const [newPerson, setNewPerson] = useState(' ')
   const [newSword, setNewSword] = useState(' ')
 
+  useEffect(() => {
+    heroesService.getAll().then(initialHeroes => { setPersons(initialHeroes) })
+  }, [])
+
   const addPerson = (event) => {
     event.preventDefault()
-    if (persons.some(e => e.name === newPerson)) {
+    if (persons.some(e => e.name === newPerson && e.sword === newSword)) {
       alert('There already exists an entry for' + newPerson)
+    }
+    else if (persons.some(e => e.name === newPerson)) {
+      const personObject = {
+        name: newPerson,
+        sword: newSword,
+      }
+      const heroToUpdate = persons.find(e => e.name === newPerson)
+      heroesService.update(heroToUpdate.id, personObject).then(returnedHero => { 
+        setPersons(persons.map(person => person.id !== heroToUpdate.id ? person : returnedHero)) 
+      })
     }
     else {
     const personObject = {
       name: newPerson,
       sword: newSword,
-      id: persons.length + 1,
     }
-    setPersons(persons.concat(personObject))
-    console.log(persons)
+    heroesService.create(personObject).then(returnedHero => { setPersons(persons.concat(returnedHero)) })
     setNewPerson(' ')
     }
   }

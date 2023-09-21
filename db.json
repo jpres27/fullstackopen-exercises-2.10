@@ -1,0 +1,24 @@
+{
+  "heroes": [
+    {
+      "name": "Ragnar",
+      "sword": "Tyrfing",
+      "id": 1
+    },
+    {
+      "name": " Arthur",
+      "sword": " Excalibur",
+      "id": 2
+    },
+    {
+      "name": " Ragnar",
+      "sword": "Biter",
+      "id": 3
+    },
+    {
+      "name": " Roger",
+      "sword": " Treetrunk",
+      "id": 4
+    }
+  ]
+}
